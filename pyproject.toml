@@ -17,5 +17,8 @@ garmin-health-insights = "garmin_health_insights.cli:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"garmin_health_insights.web" = ["*.html", "assets/*"]
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]

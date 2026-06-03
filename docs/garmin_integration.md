@@ -14,6 +14,18 @@ Pierwszy etap repozytorium rozdziela dwie odpowiedzialności:
 Dzięki temu można już testować jakość rekomendacji na eksporcie z Garmin Connect,
 a automatyczne pobieranie dodać bez przepisywania analizy.
 
+## Widok użytkownika
+
+Frontend uruchamiasz lokalnie komendą:
+
+```bash
+PYTHONPATH=src python3 -m garmin_health_insights serve --port 8000
+```
+
+Panel działa pod `http://127.0.0.1:8000` i korzysta z endpointu `POST /api/report`.
+Przeglądarka wysyła rekordy JSON do backendu, a backend zwraca gotowy raport
+z tego samego silnika, którego używa CLI.
+
 ## Dostęp do danych Garmin
 
 ### Oficjalna ścieżka

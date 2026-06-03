@@ -60,6 +60,26 @@ PYTHONPATH=src python3 -m garmin_health_insights report \
   --input sample_data/daily_health_sample.json
 ```
 
+## Gdzie widzisz dane
+
+Masz dwa widoki:
+
+1. **Frontend w przeglądarce** - lokalny panel do wgrania pliku i zobaczenia raportu:
+
+   ```bash
+   PYTHONPATH=src python3 -m garmin_health_insights serve --port 8000
+   ```
+
+   Następnie otwórz `http://127.0.0.1:8000`. W Cursor Cloud użyj podglądu/forwardingu
+   portu 8000. Na ekranie możesz wgrać JSON z Garmin Connect albo kliknąć raport demo.
+
+2. **Terminal/automatyzacja** - komenda CLI generująca Markdown lub JSON:
+
+   ```bash
+   PYTHONPATH=src python3 -m garmin_health_insights report \
+     --input sample_data/daily_health_sample.json
+   ```
+
 ## Format danych wejściowych
 
 Obsługiwany jest JSON jako lista rekordów:
@@ -86,6 +106,20 @@ CSV powinien mieć nagłówki zgodne z powyższymi polami.
 Importer akceptuje również część nazw spotykanych w eksporcie Garmin, np.
 `sleepScore`, `restingHeartRate`, `bodyBattery`, `avgStressLevel`,
 `trainingLoad` i `recoveryTimeHours`.
+
+## Jak wpiąć zegarek
+
+Fenix 7X Pro Solar nie powinien być integrowany bezpośrednio z tą aplikacją przez
+Bluetooth/USB. Praktyczny przepływ danych wygląda tak:
+
+1. zegarek synchronizuje zdrowie, sen i treningi do aplikacji Garmin Connect,
+2. Garmin Connect zapisuje dane w chmurze Garmina,
+3. ta aplikacja pobiera dane z eksportu JSON/CSV albo docelowo z Garmin Health API,
+4. frontend wyświetla raport i sugestie.
+
+W MVP importujesz plik ręcznie. W wersji produkcyjnej trzeba dodać adapter
+`GarminHealthApiSource`, skonfigurować oficjalny dostęp Garmin Health API i
+zapisywać dzienne rekordy w lokalnym magazynie.
 
 ## Docelowe pobieranie danych z Garmina
 

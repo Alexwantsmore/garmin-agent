@@ -10,6 +10,7 @@ from pathlib import Path
 from garmin_health_insights.analyzer import HealthAnalyzer
 from garmin_health_insights.models import DailyMetrics
 from garmin_health_insights.renderers import render_json, render_markdown
+from garmin_health_insights.server import build_report_payload
 from garmin_health_insights.sources import GarminExportSource
 
 
@@ -88,6 +89,23 @@ class RenderersTest(unittest.TestCase):
         self.assertIn("Raport zdrowia", markdown)
         self.assertEqual(payload["day"], "2026-06-02")
         self.assertIn("readiness_score", payload)
+
+
+class WebReportApiTest(unittest.TestCase):
+    def test_builds_report_payload_for_browser_records(self) -> None:
+        payload = build_report_payload(
+            {
+                "date": "2026-06-02",
+                "records": [
+                    {"date": "2026-06-01", "sleep_score": 80, "hrv_ms": 60},
+                    {"date": "2026-06-02", "sleep_score": 72, "hrv_ms": 54},
+                ],
+            }
+        )
+
+        self.assertEqual(payload["day"], "2026-06-02")
+        self.assertIn("readiness_score", payload)
+        self.assertIn("signals", payload)
 
 
 if __name__ == "__main__":

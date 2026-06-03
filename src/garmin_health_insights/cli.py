@@ -10,6 +10,7 @@ from typing import Sequence
 
 from garmin_health_insights.analyzer import HealthAnalyzer
 from garmin_health_insights.renderers import render_json, render_markdown
+from garmin_health_insights.server import run_server
 from garmin_health_insights.sources import GarminExportSource
 
 
@@ -48,6 +49,10 @@ def build_parser() -> argparse.ArgumentParser:
         "-o",
         help="Optional path where the report should be written. Prints to stdout when omitted.",
     )
+
+    serve = subparsers.add_parser("serve", help="Run the local web UI.")
+    serve.add_argument("--host", default="127.0.0.1", help="Host to bind. Default: 127.0.0.1.")
+    serve.add_argument("--port", type=int, default=8000, help="Port to bind. Default: 8000.")
     return parser
 
 
@@ -58,6 +63,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "report":
             return _report(args)
+        if args.command == "serve":
+            return _serve(args)
     except Exception as exc:  # pragma: no cover - CLI boundary
         print(f"Error: {exc}", file=sys.stderr)
         return 2
@@ -76,4 +83,9 @@ def _report(args: argparse.Namespace) -> int:
         Path(args.output).write_text(rendered + "\n", encoding="utf-8")
     else:
         print(rendered)
+    return 0
+
+
+def _serve(args: argparse.Namespace) -> int:
+    run_server(host=args.host, port=args.port)
     return 0
