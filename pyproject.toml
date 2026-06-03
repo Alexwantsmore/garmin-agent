@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "garmin-health-insights"
+version = "0.1.0"
+description = "CLI for turning Garmin health exports into daily readiness insights."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Garmin Agent" }]
+dependencies = ["garminconnect"]
+
+[project.scripts]
+garmin-health-insights = "garmin_health_insights.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"garmin_health_insights.web" = ["*.html", "assets/*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

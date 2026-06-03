@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Garmin Health Insights</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Garmin Fenix 7X Pro Solar</p>
+          <h1>Codzienny raport zdrowia i gotowości treningowej</h1>
+          <p>
+            Wgraj eksport JSON z Garmin Connect albo użyj danych demo. Raport
+            liczy gotowość, pokazuje najważniejsze sygnały i sugeruje, jak
+            trenować danego dnia.
+          </p>
+        </div>
+        <div class="watch-card">
+          <span class="watch-dot"></span>
+          <strong>Źródło danych</strong>
+          <p>Zegarek synchronizuje dane do Garmin Connect, a ta aplikacja czyta eksport/API.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="form-grid">
+          <label>
+            Plik danych JSON
+            <input id="file-input" type="file" accept="application/json,.json" />
+          </label>
+          <label>
+            Data raportu
+            <input id="date-input" type="date" value="2026-06-03" />
+          </label>
+          <label>
+            Dni bazowe
+            <input id="baseline-input" type="number" min="1" max="90" value="21" />
+          </label>
+        </div>
+        <div class="actions">
+          <button id="generate-button" type="button">Wygeneruj raport z pliku</button>
+          <button id="demo-button" class="secondary" type="button">Pokaż raport demo</button>
+        </div>
+        <p id="status" class="status" role="status"></p>
+      </section>
+
+      <section id="report" class="report hidden" aria-live="polite">
+        <div class="score-card">
+          <div id="score-ring" class="score-ring">
+            <span id="score">--</span>
+            <small>/100</small>
+          </div>
+          <div>
+            <p class="eyebrow">Gotowość treningowa</p>
+            <h2 id="label">Brak raportu</h2>
+            <p id="summary"></p>
+          </div>
+        </div>
+        <div class="columns">
+          <article>
+            <h3>Najważniejsze sygnały</h3>
+            <ul id="signals"></ul>
+          </article>
+          <article>
+            <h3>Sugestie na dziś</h3>
+            <ul id="suggestions"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel muted">
+        <h2>Jak wpiąć zegarek?</h2>
+        <ol>
+          <li>Fenix synchronizuje dane przez telefon/Wi-Fi do Garmin Connect.</li>
+          <li>Na dziś wgrywasz eksport JSON/CSV albo używasz przygotowanego adaptera.</li>
+          <li>Docelowo aplikacja powinna pobierać dane z oficjalnego Garmin Health API.</li>
+        </ol>
+      </section>
+    </main>
+    <script src="/assets/app.js" type="module"></script>
+  </body>
+</html>
