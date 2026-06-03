@@ -32,7 +32,7 @@ Na tej podstawie generuje:
 Wymagany jest Python 3.11+.
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
 ```
@@ -56,7 +56,7 @@ garmin-health-insights report \
 Bez instalacji pakietu można użyć:
 
 ```bash
-PYTHONPATH=src python -m garmin_health_insights report \
+PYTHONPATH=src python3 -m garmin_health_insights report \
   --input sample_data/daily_health_sample.json
 ```
 
@@ -102,5 +102,5 @@ Szczegóły integracji są opisane w `docs/garmin_integration.md`.
 ## Testy
 
 ```bash
-PYTHONPATH=src python -m unittest
+PYTHONPATH=src python3 -m unittest discover -s tests
 ```
