@@ -10,7 +10,8 @@
     "steps": 10840,
     "training_load": 320,
     "recovery_hours": 12,
-    "vo2max": 52
+    "vo2max": 52,
+    "training_readiness": 82
   },
   {
     "date": "2026-05-29",
@@ -23,7 +24,8 @@
     "steps": 9200,
     "training_load": 340,
     "recovery_hours": 16,
-    "vo2max": 52
+    "vo2max": 52,
+    "training_readiness": 78
   },
   {
     "date": "2026-05-30",
@@ -36,7 +38,8 @@
     "steps": 12100,
     "training_load": 380,
     "recovery_hours": 20,
-    "vo2max": 52
+    "vo2max": 52,
+    "training_readiness": 72
   },
   {
     "date": "2026-05-31",
@@ -49,7 +52,8 @@
     "steps": 8700,
     "training_load": 300,
     "recovery_hours": 10,
-    "vo2max": 52
+    "vo2max": 52,
+    "training_readiness": 80
   },
   {
     "date": "2026-06-01",
@@ -62,7 +66,8 @@
     "steps": 11250,
     "training_load": 360,
     "recovery_hours": 18,
-    "vo2max": 52
+    "vo2max": 52,
+    "training_readiness": 74
   },
   {
     "date": "2026-06-02",
@@ -75,7 +80,8 @@
     "steps": 13900,
     "training_load": 430,
     "recovery_hours": 28,
-    "vo2max": 52
+    "vo2max": 52,
+    "training_readiness": 63
   },
   {
     "date": "2026-06-03",
@@ -88,6 +94,7 @@
     "steps": 7600,
     "training_load": 520,
     "recovery_hours": 42,
-    "vo2max": 52
+    "vo2max": 52,
+    "training_readiness": 42
   }
 ]

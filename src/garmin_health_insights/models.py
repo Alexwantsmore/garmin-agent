@@ -61,6 +61,7 @@ class DailyMetrics:
     steps: float | None = None
     calories: float | None = None
     training_load: float | None = None
+    training_readiness: float | None = None
     recovery_hours: float | None = None
     vo2max: float | None = None
     notes: str | None = None
@@ -99,6 +100,9 @@ class DailyMetrics:
             steps=_to_float(_first_value(raw, ("steps", "totalSteps"))),
             calories=_to_float(_first_value(raw, ("calories", "activeCalories", "totalCalories"))),
             training_load=_to_float(_first_value(raw, ("training_load", "trainingLoad", "acuteTrainingLoad"))),
+            training_readiness=_to_float(
+                _first_value(raw, ("training_readiness", "trainingReadiness", "trainingReadinessScore"))
+            ),
             recovery_hours=_to_float(_first_value(raw, ("recovery_hours", "recoveryTime", "recoveryTimeHours"))),
             vo2max=_to_float(_first_value(raw, ("vo2max", "vo2MaxValue", "generic"))),
             notes=str(_first_value(raw, ("notes", "note")) or "") or None,

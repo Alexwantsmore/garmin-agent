@@ -4,10 +4,11 @@ MVP aplikacji, która zamienia dane zdrowotne z Garmin Connect/Fenix 7X Pro Sola
 na codzienny raport o stanie organizmu, gotowości treningowej i sugestiach na
 dany dzień.
 
-Obecna wersja działa bez przechowywania loginu i hasła do Garmina: wczytuje
-lokalny eksport JSON/CSV z Garmin Connect albo plik przygotowany przez przyszły
-adapter API. Dzięki temu można bezpiecznie rozwijać analizę danych, a automatyczne
-pobieranie podpiąć jako osobny moduł.
+Obecna wersja potrafi działać na dwa sposoby: wczytać lokalny eksport JSON/CSV
+albo zalogować się do konta Garmin Connect przez nieoficjalną bibliotekę
+`garminconnect` i zapisać zsynchronizowane metryki do lokalnego pliku JSON.
+Hasło nie jest zapisywane w repozytorium; biblioteka przechowuje tylko tokeny
+sesji w lokalnym katalogu, domyślnie `~/.garminconnect`.
 
 ## Co aplikacja analizuje
 
@@ -59,6 +60,31 @@ Bez instalacji pakietu można użyć:
 PYTHONPATH=src python3 -m garmin_health_insights report \
   --input sample_data/daily_health_sample.json
 ```
+
+## Pobranie danych przez konto Garmin Connect
+
+Jeśli nie masz dostępu do oficjalnego Garmin Health API, użyj synchronizacji
+przez konto Garmin Connect:
+
+```bash
+export GARMIN_EMAIL="twoj-email@example.com"
+export GARMIN_PASSWORD="twoje-haslo"
+PYTHONPATH=src python3 -m garmin_health_insights sync --days 30 --output data/garmin_daily.json
+```
+
+Możesz też pominąć `GARMIN_PASSWORD` - wtedy aplikacja poprosi o hasło w
+terminalu. Jeśli konto ma MFA/2FA, pojawi się prompt na kod. Przy pierwszym
+logowaniu biblioteka zapisuje tokeny do `~/.garminconnect`, a kolejne
+uruchomienia próbują użyć tokenów bez ponownego pytania o hasło.
+
+Potem uruchom frontend i wgraj plik `data/garmin_daily.json`:
+
+```bash
+PYTHONPATH=src python3 -m garmin_health_insights serve --port 8000
+```
+
+Uwaga: to integracja nieoficjalna przez Garmin Connect. Garmin może zmienić
+mechanizm logowania, wymusić ponowne MFA albo nałożyć limity zapytań.
 
 ## Gdzie widzisz dane
 
@@ -114,12 +140,12 @@ Bluetooth/USB. Praktyczny przepływ danych wygląda tak:
 
 1. zegarek synchronizuje zdrowie, sen i treningi do aplikacji Garmin Connect,
 2. Garmin Connect zapisuje dane w chmurze Garmina,
-3. ta aplikacja pobiera dane z eksportu JSON/CSV albo docelowo z Garmin Health API,
-4. frontend wyświetla raport i sugestie.
+3. komenda `sync` loguje się do konta Garmin Connect i pobiera ostatnie dni,
+4. aplikacja zapisuje `data/garmin_daily.json`,
+5. frontend wyświetla raport i sugestie po wgraniu tego pliku.
 
-W MVP importujesz plik ręcznie. W wersji produkcyjnej trzeba dodać adapter
-`GarminHealthApiSource`, skonfigurować oficjalny dostęp Garmin Health API i
-zapisywać dzienne rekordy w lokalnym magazynie.
+Czyli „wpięcie zegarka” odbywa się przez konto Garmin Connect, nie przez kabel
+ani bezpośredni Bluetooth.
 
 ## Docelowe pobieranie danych z Garmina
 

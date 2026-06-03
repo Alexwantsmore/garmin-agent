@@ -9,7 +9,7 @@ description = "CLI for turning Garmin health exports into daily readiness insigh
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Garmin Agent" }]
-dependencies = []
+dependencies = ["garminconnect"]
 
 [project.scripts]
 garmin-health-insights = "garmin_health_insights.cli:main"

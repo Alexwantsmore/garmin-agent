@@ -11,7 +11,7 @@ from garmin_health_insights.analyzer import HealthAnalyzer
 from garmin_health_insights.models import DailyMetrics
 from garmin_health_insights.renderers import render_json, render_markdown
 from garmin_health_insights.server import build_report_payload
-from garmin_health_insights.sources import GarminExportSource
+from garmin_health_insights.sources import GarminConnectSource, GarminExportSource
 
 
 class GarminExportSourceTest(unittest.TestCase):
@@ -46,6 +46,48 @@ class GarminExportSourceTest(unittest.TestCase):
         self.assertEqual(metrics[0].day, date(2026, 6, 1))
         self.assertEqual(metrics[0].sleep_hours, 7.5)
         self.assertEqual(metrics[0].hrv_ms, 62)
+
+
+class GarminConnectSourceTest(unittest.TestCase):
+    def test_maps_account_payloads_to_daily_metrics(self) -> None:
+        class FakeGarminClient:
+            def get_user_summary(self, day: str) -> dict[str, object]:
+                self.day = day
+                return {
+                    "restingHeartRate": 51,
+                    "totalSteps": 10000,
+                    "averageStressLevel": 28,
+                    "activeKilocalories": 620,
+                    "vo2MaxValue": 52,
+                }
+
+            def get_stats(self, day: str) -> dict[str, object]:
+                return {}
+
+            def get_sleep_data(self, day: str) -> dict[str, object]:
+                return {
+                    "dailySleepDTO": {"sleepTimeSeconds": 27000},
+                    "sleepScores": {"overall": {"value": 84}},
+                }
+
+            def get_hrv_data(self, day: str) -> dict[str, object]:
+                return {"hrvSummary": {"lastNightAvg": 63}}
+
+            def get_body_battery(self, day: str) -> dict[str, object]:
+                return {"bodyBatteryValuesArray": [["2026-06-03T22:00:00", 71]]}
+
+            def get_training_readiness(self, day: str) -> list[dict[str, object]]:
+                return [{"trainingReadinessScore": 76}]
+
+        metrics = GarminConnectSource(client=FakeGarminClient(), days=1, end_day=date(2026, 6, 3)).load()
+
+        self.assertEqual(metrics[0].day, date(2026, 6, 3))
+        self.assertEqual(metrics[0].resting_hr, 51)
+        self.assertEqual(metrics[0].sleep_score, 84)
+        self.assertEqual(metrics[0].sleep_hours, 7.5)
+        self.assertEqual(metrics[0].hrv_ms, 63)
+        self.assertEqual(metrics[0].body_battery, 71)
+        self.assertEqual(metrics[0].training_readiness, 76)
 
 
 class HealthAnalyzerTest(unittest.TestCase):

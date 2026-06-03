@@ -81,6 +81,9 @@ class HealthAnalyzer:
         if current.body_battery is not None:
             components.append((max(0.0, min(100.0, current.body_battery)), 0.15))
 
+        if current.training_readiness is not None:
+            components.append((max(0.0, min(100.0, current.training_readiness)), 0.15))
+
         if current.stress_score is not None:
             components.append((max(0.0, 100.0 - current.stress_score), 0.10))
 
@@ -155,6 +158,9 @@ class HealthAnalyzer:
         if current.body_battery is not None:
             signals.append(f"Body Battery: {current.body_battery:.0f}/100.")
 
+        if current.training_readiness is not None:
+            signals.append(f"Garmin Training Readiness: {current.training_readiness:.0f}/100.")
+
         if current.stress_score is not None:
             signals.append(f"Średni stres: {current.stress_score:.0f}/100.")
 
@@ -195,6 +201,9 @@ class HealthAnalyzer:
 
         if current.resting_hr is not None and rhr_baseline and current.resting_hr > rhr_baseline + 5:
             suggestions.append("Podwyższone tętno spoczynkowe może oznaczać zmęczenie, stres lub infekcję.")
+
+        if current.training_readiness is not None and current.training_readiness < 50:
+            suggestions.append("Garmin Training Readiness jest niska; potraktuj to jako dodatkowy sygnał do redukcji bodźca.")
 
         if current.stress_score is not None and current.stress_score > 55:
             suggestions.append("Zaplanuj przerwy od bodźców i krótki spacer lub ćwiczenia oddechowe.")

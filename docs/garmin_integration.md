@@ -26,6 +26,29 @@ Panel działa pod `http://127.0.0.1:8000` i korzysta z endpointu `POST /api/repo
 Przeglądarka wysyła rekordy JSON do backendu, a backend zwraca gotowy raport
 z tego samego silnika, którego używa CLI.
 
+## Synchronizacja przez konto Garmin Connect
+
+Bez oficjalnego Garmin Health API aplikacja używa nieoficjalnej biblioteki
+`garminconnect`, która loguje się do konta Garmin Connect tym samym przepływem
+co aplikacja mobilna. Komenda:
+
+```bash
+export GARMIN_EMAIL="twoj-email@example.com"
+export GARMIN_PASSWORD="twoje-haslo"
+PYTHONPATH=src python3 -m garmin_health_insights sync --days 30 --output data/garmin_daily.json
+```
+
+Przy pierwszym uruchomieniu może być wymagany kod MFA. Tokeny sesji są zapisywane
+lokalnie w `~/.garminconnect` albo katalogu wskazanym przez `--tokenstore` /
+`GARMINTOKENS`. Hasła nie zapisujemy w plikach projektu.
+
+Ryzyka tej ścieżki:
+
+- integracja nie jest oficjalnie wspierana przez Garmin,
+- Garmin może zmienić logowanie lub strukturę endpointów,
+- zbyt częste pobieranie może skończyć się rate limitem,
+- dane zdrowotne zapisane w `data/` są prywatne i nie powinny być commitowane.
+
 ## Dostęp do danych Garmin
 
 ### Oficjalna ścieżka
